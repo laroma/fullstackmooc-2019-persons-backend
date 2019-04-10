@@ -32,6 +32,10 @@ let persons = [
   }
 ];
 
+const findPerson = id => {
+  return persons.find(p => p.id === Number(id));
+};
+
 app.get('/info', (req, res) => {
   const info = `
   <p>Puhelinluettelossa on ${persons.length} henkilön tiedot</p>
@@ -43,11 +47,25 @@ app.get('/info', (req, res) => {
 app.get('/api/persons', (req, res) => res.json(persons));
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const person = persons.find(p => p.id === id);
+  const id = req.params.id;
+  const person = findPerson(id);
 
   if (person) {
     return res.json(person);
+  } else {
+    return res
+      .status(404)
+      .json({ error: `person not found by given id ${id}` });
+  }
+});
+
+app.delete('/api/persons/:id', (req, res) => {
+  const id = req.params.id;
+  const person = findPerson(id);
+
+  if (person) {
+    persons = persons.filter(p => p.id !== person.id);
+    return res.status(200);
   } else {
     return res
       .status(404)
