@@ -32,6 +32,14 @@ let persons = [
   }
 ];
 
+app.get('/info', (req, res) => {
+  const info = `
+  <p>Puhelinluettelossa on ${persons.length} henkilön tiedot</p>
+  <p>${new Date()}</p>`;
+
+  return res.send(info);
+});
+
 app.get('/api/persons', (req, res) => res.json(persons));
 
 const PORT = 3001;
