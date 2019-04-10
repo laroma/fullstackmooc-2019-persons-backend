@@ -3,8 +3,16 @@ const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
+morgan.token('body-json', req => {
+  return JSON.stringify(req.body);
+});
+
 app.use(bodyParser.json());
-app.use(morgan('tiny'));
+app.use(
+  morgan(
+    ':method :url :status :res[content-length] - :response-time ms :body-json'
+  )
+);
 
 let persons = [
   {
@@ -105,3 +113,4 @@ const generateId = () => Math.floor(Math.random() * Math.floor(99999));
 
 const PORT = 3001;
 app.listen(PORT);
+console.log(`running at http://localhost:${PORT}`);
