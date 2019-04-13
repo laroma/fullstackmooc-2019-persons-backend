@@ -2,12 +2,14 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const cors = require('cors');
 
 morgan.token('body-json', req => {
   return JSON.stringify(req.body);
 });
 
 app.use(bodyParser.json());
+app.use(cors());
 app.use(
   morgan(
     ':method :url :status :res[content-length] - :response-time ms :body-json'
@@ -36,7 +38,7 @@ let persons = [
     id: 4
   },
   {
-    name: 'Lou Reed',
+    name: 'Han Solo',
     number: '555-1231234',
     id: 5
   }
@@ -111,6 +113,6 @@ app.post('/api/persons', (req, res) => {
 
 const generateId = () => Math.floor(Math.random() * Math.floor(99999));
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT);
-console.log(`running at http://localhost:${PORT}`);
+console.log(`running http://localhost:${PORT}`);
